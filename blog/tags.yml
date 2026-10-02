@@ -17,3 +17,33 @@ facebook:
   label: 'Facebook'
   permalink: '/facebook'
   description: 'Articles on the topic facebook'
+
+openstack:
+  label: 'OpenStack'
+  permalink: '/openstack'
+  description: 'Articles on the topic openstack'
+
+linux:
+  label: 'Linux'
+  permalink: '/linux'
+  description: 'Articles on the topic linux'
+
+kubernetes:
+  label: 'Kubernetes'
+  permalink: '/kubernetes'
+  description: 'Articles on the topic kubernetes'
+
+homelab:
+  label: 'Homelab'
+  permalink: '/homelab'
+  description: 'Articles on the topic homelab'
+
+proxmox:
+  label: 'Proxmox'
+  permalink: '/proxmox'
+  description: 'Articles on the topic proxmox'
+
+storage:
+  label: 'Storage'
+  permalink: '/storage'
+  description: 'Articles on the topic storage'
