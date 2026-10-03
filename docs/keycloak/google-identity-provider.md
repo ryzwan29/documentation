@@ -69,7 +69,7 @@ If you only have one or two accounts, you can stay in Testing and add them under
 | Field | Value |
 | --- | --- |
 | Application type | `Web application` |
-| Name | `keycloak` |
+| Name | `Homelab SSO` |
 | Authorized JavaScript origins | Leave empty |
 | Authorized redirect URIs | `https://auth.rizwan.my.id/realms/homelab/broker/google/endpoint` |
 
@@ -90,6 +90,7 @@ The redirect URI must match exactly, including `https://`, the realm name `homel
 | Redirect URI | Read-only. Must be the same as the one in Google. |
 | Client ID | From Google |
 | Client Secret | From Google |
+| Hosted domain | Leave empty (only for Google Workspace) |
 | Display order | Leave empty |
 
 4. Click **Add**.
@@ -102,15 +103,19 @@ Open the `google` provider, then **Advanced settings**.
 | --- | --- | --- |
 | Scopes | `openid email profile` | |
 | Trust Email | `ON` | Google already verifies the email, so Keycloak can match it to the local user without another check. |
-| Account linking only | `OFF` | Turn it on only if Google must never be used as a stand-alone login. |
+| Account linking only | `OFF` | If `ON`, users cannot sign in with Google at all, they can only link it from the Account Console. Keep it `OFF`. |
 | Hide on login page | `OFF` | Keeps the Google button visible. |
 | Sync mode | `Import` | Profile data is copied on the first login only, so manual changes by the admin are not overwritten. |
-| First login flow | Keep default for now | Changed in [Account Linking](./account-linking). |
+| First login flow override | Keep default for now | Changed in [Account Linking](./account-linking). |
 
 Click **Save**.
 
+:::info
+With **Trust Email** `ON`, the "Verify existing account by Email" step of a first login flow can link accounts without sending any email or asking for a password. This is safe in this setup because the custom flow in [Account Linking](./account-linking) disables that step and requires the local password instead.
+:::
+
 :::warning
-Do not test the Google login yet. With the default first login flow, Keycloak creates a **new user** instead of linking to the local one. Finish [Account Linking](./account-linking) first, then test.
+Do not test the Google login yet. With the default first login flow, a Google account whose email does not match a local user creates a **duplicate user**, and the "verify by email" option needs SMTP. Finish [Account Linking](./account-linking) first, then test.
 :::
 
 ## Verify
@@ -124,6 +129,7 @@ Do not test the Google login yet. With the default first login flow, Keycloak cr
 | Symptom | Cause | Fix |
 | --- | --- | --- |
 | `Error 400: redirect_uri_mismatch` | The redirect URI in Google is different from the one in Keycloak. | Copy the **Redirect URI** from the Keycloak provider page into Google. Check the realm name, `https://`, and trailing slashes. |
+| `Error 400: invalid_request` or `Access blocked: this app's request is invalid` | The consent screen is incomplete, or the redirect URI uses a private domain. | Finish the consent screen (app name, support email, scopes) and use a public domain with HTTPS. |
 | `Error 401: invalid_client` | Wrong Client ID or Client Secret. | Paste the credentials again in Keycloak, without extra spaces. |
 | `Access blocked: ... has not completed the Google verification process` | The app is in Testing and the account is not a test user. | Add the account under **Test users**, or publish the app. |
 | No Google button on the login page | **Hide on login page** is `ON`, the provider is disabled, or the wrong realm is open. | Check the provider settings in the `homelab` realm. |

@@ -2,7 +2,7 @@
 sidebar_position: 3
 title: Nextcloud Google Login (Keycloak SSO)
 description: Add "Login with Google" to Nextcloud using the user_oidc app and Keycloak as the OpenID Connect provider.
-tags: [nextcloud, keycloak]
+tags: [nextcloud, keycloak, sso]
 ---
 
 # Nextcloud Google Login (Keycloak SSO)
@@ -13,11 +13,19 @@ This guide connects Nextcloud to Keycloak with the `user_oidc` app, so users sig
 Nextcloud  ->  Keycloak (realm: homelab)  ->  Google
 ```
 
-## Assumptions
+## Prerequisites
 
-- Nextcloud is already installed and reachable at `https://cloud.rizwan.my.id` (check with the command below, it must print `installed: true`).
-- Keycloak runs at `https://auth.rizwan.my.id`, with the realm `homelab`, the `google` identity provider, and the `groups` client scope already created.
-- The `first-broker-login-homelab` flow is set on the Google identity provider, and each user already exists in Keycloak with a **local password** and the same **email** as their Google account.
+Complete these guides first. Each one is done once for the whole realm, not per application.
+
+| Guide | What it gives you |
+| --- | --- |
+| [Install Keycloak](../keycloak/install-keycloak.md) | A running Keycloak at `https://auth.rizwan.my.id`. |
+| [Realm, Groups and Users](../keycloak/realm-groups-users.md) | The `homelab` realm, groups, and local users with a **local password** and the same **email** as their Google account. |
+| [Google Identity Provider](../keycloak/google-identity-provider.md) | The `google` identity provider in the realm. |
+| [Account Linking](../keycloak/account-linking.md) | The `first-broker-login-homelab` flow, so a Google login links to the local user. |
+| [Groups Client Scope](../keycloak/groups-client-scope.md) | The `groups` client scope and mapper. |
+
+You also need Nextcloud installed and reachable at `https://cloud.rizwan.my.id`. This command must print `installed: true`:
 
 ```bash
 docker exec -u www-data nextcloud-app php occ status | grep installed
@@ -25,42 +33,25 @@ docker exec -u www-data nextcloud-app php occ status | grep installed
 
 ## Create the Keycloak client
 
-In the Keycloak admin console, select the `homelab` realm, then **Clients → Create client**.
-
-### General settings
+Create the client as described in [Create an OIDC Client](../keycloak/create-oidc-client.md), using these values:
 
 | Field | Value |
 | --- | --- |
-| Client type | `OpenID Connect` |
 | Client ID | `nextcloud` |
-
-### Capability config
-
-| Field | Value |
-| --- | --- |
-| Client authentication | `ON` |
-| Authorization | `OFF` |
-| Standard flow | `ON` |
-| Direct access grants | `OFF` |
-
-### Login settings
-
-| Field | Value |
-| --- | --- |
+| Client authentication | `On` |
+| Standard flow | `On` |
+| Direct access grants | `Off` |
 | Root URL | `https://cloud.rizwan.my.id` |
 | Home URL | `https://cloud.rizwan.my.id` |
 | Valid redirect URIs | `https://cloud.rizwan.my.id/apps/user_oidc/code` |
 | Valid post logout redirect URIs | `https://cloud.rizwan.my.id/*` |
 | Web origins | `https://cloud.rizwan.my.id` |
 
+Then copy the **Client secret** from the **Credentials** tab, and assign the `groups` scope to the client as **Default**.
+
 :::warning
 The redirect URI for `user_oidc` is `/apps/user_oidc/code`. The path `/apps/oidc_login/oidc/*` belongs to a different plugin (`oidc_login`) and causes `Invalid parameter: redirect_uri`.
 :::
-
-### Copy the secret and assign the groups scope
-
-1. Open the client, go to the **Credentials** tab, and copy the **Client secret**.
-2. Go to **Client scopes → Add client scope**, select `groups`, and add it as **Default**.
 
 ## Install the user_oidc app
 
@@ -85,19 +76,19 @@ Expected output:
 user_oidc 8.11.0 enabled
 ```
 
+Check that the app is active:
+
+```bash
+docker exec -u www-data nextcloud-app php occ app:list | grep user_oidc
+```
+
 :::tip
 `docker exec -u www-data nextcloud-app php occ app:install user_oidc` also works when the app store is reachable. If it fails with `not found on the appstore`, the app store may be rate limiting your IP (HTTP `429`). Use the manual install above instead of retrying.
 :::
 
 ## Allow connections to local servers
 
-Keycloak usually resolves to a private IP inside the LAN (split DNS). Nextcloud blocks requests to local addresses by default, which shows up as `Could not reach the OpenID Connect provider`. Allow it:
-
-```bash
-docker exec -u www-data nextcloud-app php occ config:system:set allow_local_remote_servers --value=true --type=boolean
-```
-
-The Nextcloud container must also be able to resolve `auth.rizwan.my.id`. Test it from inside the container:
+Check that the Nextcloud container can reach Keycloak:
 
 ```bash
 docker exec nextcloud-app curl -sS -o /dev/null -w "code=%{http_code}\n" \
@@ -105,6 +96,12 @@ docker exec nextcloud-app curl -sS -o /dev/null -w "code=%{http_code}\n" \
 ```
 
 You should get `code=200`. If the host does not resolve, set the DNS server in `/etc/docker/daemon.json` (or `dns:` in the compose file) and restart Docker.
+
+If Keycloak resolves to a private IP inside the LAN (split DNS), Nextcloud blocks the request by default and shows `Could not reach the OpenID Connect provider`, even though `curl` works. Allow local addresses:
+
+```bash
+docker exec -u www-data nextcloud-app php occ config:system:set allow_local_remote_servers --value=true --type=boolean
+```
 
 ## Register the provider
 
@@ -141,13 +138,7 @@ The command prints nothing on success. Verify it:
 docker exec -u www-data nextcloud-app php occ user_oidc:provider
 ```
 
-```
-+----+------------+---------------------------------------------------------------------------+-----------+
-| ID | Identifier | Discovery endpoint                                                        | Client ID |
-+----+------------+---------------------------------------------------------------------------+-----------+
-| 1  | Google     | https://auth.rizwan.my.id/realms/homelab/.well-known/openid-configuration | nextcloud |
-+----+------------+---------------------------------------------------------------------------+-----------+
-```
+![SSO Provider](<img/Screenshot 2026-10-04 022932.png>)
 
 :::warning
 The client secret ends up in your shell history. Remove the entry with `history -d <number>`, or regenerate the secret in Keycloak and update it with:
@@ -164,12 +155,27 @@ docker exec -u www-data nextcloud-app php occ user_oidc:provider:delete Google
 ```
 
 ## Test the login
+<video controls muted playsInline width="100%">
+  <source src="/video/nextcloud-google-login.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+*Demo: signing in to Nextcloud with Google through Keycloak.*
 
 1. Open `https://cloud.rizwan.my.id` in a private window.
 2. Click **Login with Google**.
 3. On the Keycloak page, choose Google and sign in.
-4. On the first login, Keycloak asks for the **local password** of the user to link the Google account. Later logins skip this.
+4. On the first login, Keycloak asks for the **local password** of the user to link the Google account (see [Account Linking](../keycloak/account-linking.md)). Later logins skip this.
 5. You are redirected back to Nextcloud and the user is created automatically.
+
+Then check the user and the groups that came from the token:
+
+```bash
+docker exec -u www-data nextcloud-app php occ user:list
+docker exec -u www-data nextcloud-app php occ group:list
+```
+
+You should see the user ID (for example `rizwan.fairuz`) and groups such as `admins`.
 
 ## Make a user admin
 
@@ -183,25 +189,13 @@ docker exec -u www-data nextcloud-app php occ group:adduser admin rizwan.fairuz
 Keep the local `admin` account as a break-glass login, and do not disable password login until SSO is stable. If you get locked out of the SSO redirect, use `https://cloud.rizwan.my.id/login?direct=1`.
 :::
 
-## Optional: clean up the login page
+### Skip the Keycloak page
 
-Disable the "Forgot password?" link:
+To jump straight to Google, open Keycloak **Authentication → Flows → browser**, click the gear on **Identity Provider Redirector**, and set **Default Identity Provider** to `google`.
 
-```bash
-docker exec -u www-data nextcloud-app php occ config:system:set lost_password_link --value=disabled
-```
-
-"Log in with a device" has no setting. Hide it with CSS in **Administration settings → Theming → Custom CSS**. Inspect the element first, because selectors change between versions:
-
-```css
-a[href*="webauthn"] { display: none !important; }
-```
-
-:::info
-CSS only hides the element, it does not turn off the feature. The same applies to a Google logo on the button: add it with a `::before` rule on the button's selector and an inline SVG data URI.
+:::warning
+This applies to every login in the realm, for every application. The Keycloak username and password form is no longer shown, which also hides the local backup login. Only enable it when Google login is stable.
 :::
-
-To skip the Keycloak page and jump straight to Google, open Keycloak **Authentication → Flows → browser**, click the gear on **Identity Provider Redirector**, and set **Default Identity Provider** to `google`. This applies to every login in the realm, so local Keycloak logins are no longer shown.
 
 ## Troubleshooting
 
@@ -213,7 +207,8 @@ To skip the Keycloak page and jump straight to Google, open Keycloak **Authentic
 | `Could not reach the OpenID Connect provider` | The container cannot resolve or reach Keycloak, or local servers are blocked. Fix DNS and set `allow_local_remote_servers` to `true`. |
 | `Invalid parameter: redirect_uri` | The redirect URI in Keycloak must be exactly `https://cloud.rizwan.my.id/apps/user_oidc/code`. |
 | `invalid_client` or unauthorized | Wrong client secret. Update it with `--clientsecret`. |
-| `Invalid username or password` on first Google login | The user has no local password in Keycloak, or the wrong one was entered. Set it under **Users → Credentials**. |
+| `Invalid username or password` on first Google login | The user has no local password in Keycloak, or the wrong one was entered. Set it under **Users → Credentials**. See [Account Linking](../keycloak/account-linking.md). |
+| No groups in Nextcloud | The `groups` scope is not assigned to the client, or `--scope` does not include `groups`. Check the evaluated token as in [Groups Client Scope](../keycloak/groups-client-scope.md). |
 | Untrusted domain | Check `NEXTCLOUD_TRUSTED_DOMAINS` and the headers sent by the reverse proxy. |
 | A second user such as `rizwan.fairuz_1` appears | The user ID mapping changed after the first login. Keep `--unique-uid=0` and `--mapping-uid=preferred_username` consistent. |
 
