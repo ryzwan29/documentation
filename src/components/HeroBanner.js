@@ -79,14 +79,14 @@ export default function HeroBanner() {
               ))}
             </div>
 
-            <div className='mt-6'>
+            {/* <div className='mt-6'>
               <Link
                 href='https://github.com/namnguyenthanhwork/docusaurus-tailwind-shadcn-template'
                 className='text-blue-700 dark:text-green-700'
               >
                 👉 Please read README.md for more about project information
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

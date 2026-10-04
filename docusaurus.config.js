@@ -59,7 +59,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/namnguyenthanhwork/docusaurus-tailwind-shadcn-template/tree/main'
+            'https://github.com/ryzwan29/documentation/tree/main'
         },
         blog: false,
         theme: {
@@ -226,7 +226,7 @@ const config = {
         onUntruncatedBlogPosts: 'ignore',
         // Remove this to remove the "edit this page" links.
         editUrl:
-          'https://github.com/namnguyenthanhwork/docusaurus-tailwind-shadcn-template/tree/main/',
+          'https://github.com/ryzwan29/documentation/tree/main/',
         remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]]
       }
     ]
