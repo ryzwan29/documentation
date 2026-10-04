@@ -118,25 +118,45 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Introduction',
                 to: '/docs/intro'
+              },
+              {
+                label: 'Keycloak',
+                to: '/docs/keycloak/introduction'
+              },
+              {
+                label: 'Nextcloud',
+                to: '/docs/nextcloud/introduction'
+              },
+              {
+                label: 'Vaultwarden',
+                to: '/docs/vaultwarden/introduction'
               }
             ]
           },
           {
-            title: 'Community',
+            title: 'Connect',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus'
+                label: 'Email',
+                href: 'mailto:rizwanfairuzmamduh29@gmail.com'
+              },
+              {
+                label: 'GitHub',
+                href: 'https://github.com/ryzwan29'
+              },
+              {
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/rizwan-fairuz-mamduh'
               },
               {
                 label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus'
+                href: 'https://discord.com/users/791457544358199368'
               },
               {
-                label: 'X',
-                href: 'https://x.com/docusaurus'
+                label: 'Telegram',
+                href: 'https://t.me/Ryddd29'
               }
             ]
           },
@@ -148,13 +168,17 @@ const config = {
                 to: '/blog'
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus'
+                label: 'About Me',
+                to: '/about-me'
+              },
+              {
+                label: 'RydOne',
+                href: 'https://rydone.xyz'
               }
             ]
           }
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Docusaurus Tailwind Shadcn. Templates by <a href="https://github.com/namnguyenthanhwork" style="font-weight: bold;" target="_blank">Thành Nam Nguyễn</a>`
+        copyright: `Copyright © ${new Date().getFullYear()} Rizwan Fairuz Mamduh. Built with Docusaurus.`
       },
       prism: {
         additionalLanguages: [
@@ -209,7 +233,7 @@ const config = {
         path: 'blog',
         editLocalizedFiles: false,
         blogTitle: 'Blog',
-        blogDescription: 'Blog description is here ...',
+        blogDescription: 'Write-ups on OpenStack, Proxmox, storage, and homelab experiments.',
         blogSidebarCount: 'ALL',
         blogSidebarTitle: 'List blog',
         routeBasePath: 'blog',

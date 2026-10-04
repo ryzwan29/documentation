@@ -1,37 +1,45 @@
+import Link from '@docusaurus/Link'
+
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: 'Step-by-Step Docs',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    to: '/docs/intro',
+    linkLabel: 'Browse the docs',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and used to get your
-        website up and running quickly.
+        Install guides for Proxmox, OpenStack, Keycloak, Nextcloud, and Vaultwarden, written so you
+        can follow them from start to finish.
       </>
     )
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Homelab Write-ups',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    to: '/blog',
+    linkLabel: 'Read the blog',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go ahead and move your
-        docs into the <code>docs</code> directory.
+        Posts on running OpenStack with Synology iSCSI storage, deploying Xpenology on Proxmox, and
+        other experiments from the lab.
       </>
     )
   },
   {
-    title: 'Powered by React',
+    title: 'Cloud & Blockchain Infra',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    to: '/about-me',
+    linkLabel: 'More about me',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can be extended while
-        reusing the same header and footer.
+        By day I monitor OpenStack with Prometheus and Grafana. On the side I operate validator
+        nodes on 30+ blockchain networks.
       </>
     )
   }
 ]
 
-function Feature({ Svg, title, description }) {
+function Feature({ Svg, title, description, to, linkLabel }) {
   return (
     <div>
       <div className='text--center'>
@@ -40,6 +48,9 @@ function Feature({ Svg, title, description }) {
       <div className='text--center padding-horiz--md'>
         <p className='mb-2 text-xl font-bold'>{title}</p>
         <p className='mx-auto max-w-sm'>{description}</p>
+        <Link to={to} className='font-medium'>
+          {linkLabel} →
+        </Link>
       </div>
     </div>
   )

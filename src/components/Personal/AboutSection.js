@@ -34,7 +34,7 @@ export default function AboutSection() {
             rel='noopener noreferrer'
             className='font-medium text-blue-600 no-underline hover:underline'
           >
-            rydone.xyz
+            RydOne
           </Link>
           ). That means validator, RPC, and sentry nodes, provisioned with Terraform and Ansible,
           automated with Bash and Python, and watched with Prometheus and Grafana. 
