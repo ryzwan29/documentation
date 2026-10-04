@@ -12,7 +12,7 @@ export default function AboutSection() {
       <h2 className='mb-8 text-3xl font-bold'>About</h2>
       <div className='prose prose-lg dark:prose-invert max-w-none space-y-4'>
         <p className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
-          I&apos;m a Cloud Engineer at PT. Boer Technology, where I keep OpenStack-based cloud
+          I&apos;m a Cloud Engineer where I keep OpenStack-based cloud
           infrastructure and virtual machine environments healthy. My day-to-day covers monitoring
           with Grafana and Prometheus, writing alerting rules for better incident detection,
           maintaining local Linux package repositories, and troubleshooting Ubuntu and Red Hat-based
