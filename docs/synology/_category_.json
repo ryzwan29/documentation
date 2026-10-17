@@ -1,0 +1,8 @@
+{
+  "label": "Synology",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Deploy Synology DSM on Proxmox with Xpenology, then set up users, networking, storage, iSCSI, and NFS."
+  }
+}
