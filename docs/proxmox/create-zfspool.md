@@ -413,4 +413,4 @@ done
 
 ## What's next
 
-The pool is ready. If you want to change its name later, continue with [Rename a ZFS Pool](./rename-zfs-pool).
+The pool is ready. If you want to change its name later, continue with [Rename a ZFS Pool](./rename-zfspool.md).
