@@ -55,20 +55,20 @@ export default function HeroBanner() {
                 }}
               />
               <AnimatedGradientText className='text-sm font-medium'>
-                ☁️ Cloud Infrastructure · Homelab 
+                📝 Personal Docs · Homelab Notes
               </AnimatedGradientText>
             </div>
 
             <h1 className='mt-4 mb-4 text-[28px] leading-tight font-bold text-gray-900 sm:mt-6 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl dark:text-white'>
-              Cloud Infrastructure, Homelab
+              Homelab &amp; Self-Hosted
               <br className='hidden sm:block' />
-              <span className='sm:hidden'> </span>&amp; Self-Hosted Guides
+              <span className='sm:hidden'> </span>Project Documentation
             </h1>
 
             <p className='mx-auto mb-6 max-w-2xl text-base leading-relaxed text-gray-600 sm:mb-8 sm:text-lg dark:text-gray-300'>
-              Docs and write-ups from Rizwan Fairuz Mamduh, a cloud engineer. OpenStack, Proxmox,
-              Synology storage, Keycloak SSO, Nextcloud, and Vaultwarden, documented step by step
-              from my own lab.
+              My personal documentation of the projects I have learned and built, written down step
+              by step from my own lab. If you run into the same setup or problem, feel free to use
+              it as a reference.
             </p>
 
             <div className='mb-8 flex flex-wrap justify-center gap-3'>
@@ -81,7 +81,7 @@ export default function HeroBanner() {
                 <Link to='/blog'>Latest Posts</Link>
               </Button>
               <Button variant='outline' size='lg' asChild>
-                <Link to='/about-me'>About Me</Link>
+                <Link to='/about-me'>About This Site</Link>
               </Button>
             </div>
 

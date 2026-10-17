@@ -40,7 +40,7 @@ export default function HeroSection() {
           </h1>
 
           <p className='text-xl leading-relaxed text-gray-600 dark:text-gray-400'>
-            I keep OpenStack clouds monitored and running, and I operate validator nodes on 20+
+            I keep OpenStack clouds monitored and running, and I operate validator nodes on 30+
             blockchain networks. Infrastructure, automation, and observability are what I do.
           </p>
 

@@ -12,22 +12,20 @@ export default function AboutSection() {
       <h2 className='mb-8 text-3xl font-bold'>About</h2>
       <div className='prose prose-lg dark:prose-invert max-w-none space-y-4'>
         <p className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
-          I&apos;m a Cloud Engineer where I keep OpenStack-based cloud
-          infrastructure and virtual machine environments healthy. My day-to-day covers monitoring
-          with Grafana and Prometheus, writing alerting rules for better incident detection,
-          maintaining local Linux package repositories, and troubleshooting Ubuntu and Red Hat-based
-          servers together with the OpenStack infrastructure team.
+          This site is my notebook for documenting and sharing what I build and run: homelab setups, step-by-step tutorials, and the projects I work on. It is not meant to show off, just to keep notes I can come back to, and maybe save someone else some time.
         </p>
         <p className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
-          My path into infrastructure started with networking at SMK Wikrama Bogor, then moved
-          through ISP and FTTH work, and on to system engineering: VMware ESXi and vCenter, Proxmox
-          clusters with Ceph and HA, Windows Server, and VM backup and recovery. Along the way I
-          picked up cloud fundamentals through an OpenStack and Kolla Ansible project at the
-          Infradigital cybersecurity bootcamp, plus hands-on AWS work.
+          The docs cover the self-hosted services and infrastructure I have learned and built, and they keep growing as I take on new projects. Each guide is written to be followed from top to bottom, from a clean install to a working setup.
         </p>
         <p className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
-          Outside of work, I run blockchain infrastructure as an independent validator operator
-          since January 2025 (
+          I try to write the guides in a general way, so they work on your hardware and not only on mine. Names, domains, and disks are placeholders you replace with your own. Where a change can break something, the guide has a pre-check before it, a post-check after it, a troubleshooting table, and a way to roll back.
+        </p>
+        <p className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
+          The blog is for longer write-ups and experiments. These are the things I tried, what worked, and what did not.
+        </p>
+        <p className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
+          I also run blockchain infrastructure as an independent validator operator since
+          January 2025 (
           <Link
             to='https://rydone.xyz'
             target='_blank'

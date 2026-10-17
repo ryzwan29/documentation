@@ -8,8 +8,8 @@ const FeatureList = [
     linkLabel: 'Browse the docs',
     description: (
       <>
-        Install guides for Proxmox, OpenStack, Keycloak, Nextcloud, and Vaultwarden, written so you
-        can follow them from start to finish.
+        Guides written from the setups I actually ran, so you can follow them from start to
+        finish.
       </>
     )
   },
@@ -20,20 +20,19 @@ const FeatureList = [
     linkLabel: 'Read the blog',
     description: (
       <>
-        Posts on running OpenStack with Synology iSCSI storage, deploying Xpenology on Proxmox, and
-        other experiments from the lab.
+        Longer write-ups and experiments from the lab, including what worked and what did not.
       </>
     )
   },
   {
-    title: 'Cloud & Blockchain Infra',
+    title: 'Projects & Validator Nodes',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     to: '/about-me',
-    linkLabel: 'More about me',
+    linkLabel: 'About this site',
     description: (
       <>
-        By day I monitor OpenStack with Prometheus and Grafana. On the side I operate validator
-        nodes on 30+ blockchain networks.
+        Notes from other projects I have learned from, including my independent blockchain
+        validator operations under RydOne.
       </>
     )
   }
